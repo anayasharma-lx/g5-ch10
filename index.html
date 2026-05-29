@@ -8,19 +8,18 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --grass:#3D7A23;--grass2:#2A5C17;--grass-light:#A8D878;
+  --grass:#3D7A23;--grass2:#2A5C17;--grass-light:#C8EEA0;
   --earth:#8B6914;--earth2:#6B4A0A;--earth-light:#D4A843;
-  --wood:#9B6B2A;--wood2:#7A5020;
-  --sky:#D4E8F0;--sky2:#B8D8E8;
-  --fence:#F5E8C8;--fence2:#D4C08A;
+  --fence:#D4B870;--fence2:#A07828;
   --red:#C0392B;--blue:#2471A3;
-  --paper:#F8F3E8;--paper2:#EDE4D0;
+  --paper:#F8F3E8;--paper2:#EDE4D0;--paper3:#E0D0B0;
   --ink:#1A1208;--ink2:#4A3A1A;--ink3:#8A7050;
   --rule:#C8B890;
   --sans:'Syne',sans-serif;--serif:'Instrument Serif',serif;--mono:'Space Mono',monospace;
 }
 html,body{width:100%;min-height:100vh;background:var(--paper);color:var(--ink);font-family:var(--sans);overflow-x:hidden}
 
+/* ── HEADER ── */
 .header{background:var(--grass);padding:0 24px;display:flex;align-items:center;gap:16px;height:56px;
   border-bottom:3px solid var(--grass2);position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.25)}
 .header-title{font-family:var(--serif);font-size:22px;color:#F8FFF0;font-style:italic}
@@ -30,87 +29,99 @@ html,body{width:100%;min-height:100vh;background:var(--paper);color:var(--ink);f
 .tab.on{background:var(--paper);color:var(--ink);font-weight:700}
 .tab:hover:not(.on){color:rgba(248,255,240,0.85)}
 
-.main{max-width:900px;margin:0 auto;padding:24px 16px 60px;position:relative;z-index:1}
+.main{max-width:900px;margin:0 auto;padding:20px 16px 60px}
+.pnl{display:none}.pnl.on{display:block}
 
-/* FARM CANVAS */
-.farm-wrap{border-radius:12px;overflow:hidden;border:3px solid var(--earth2);box-shadow:0 8px 32px rgba(0,0,0,0.25);margin-bottom:20px}
-#farm-canvas{display:block;cursor:crosshair}
+/* ── CONCEPT BANNER ── */
+.concept{background:var(--grass2);border-radius:12px;padding:16px 20px;margin-bottom:16px;display:flex;gap:14px;align-items:flex-start}
+.concept-icon{font-size:32px;flex-shrink:0;line-height:1.1}
+.concept-title{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(200,238,160,0.6);margin-bottom:4px}
+.concept-text{font-family:var(--serif);font-style:italic;font-size:14px;color:#F0FFE0;line-height:1.7}
+.concept-text strong{font-style:normal;color:var(--earth-light)}
 
-/* CONTROLS */
-.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
-.mode-btn{
-  display:flex;align-items:center;gap:6px;padding:10px 20px;
+/* ── STATS ── */
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.stat-card{background:#fff;border:2px solid var(--rule);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:12px}
+.stat-icon{font-size:28px;flex-shrink:0}
+.stat-body{}
+.stat-label{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);margin-bottom:2px}
+.stat-row{display:flex;align-items:baseline;gap:5px}
+.stat-val{font-family:var(--mono);font-size:28px;font-weight:700;line-height:1}
+.stat-unit{font-family:var(--mono);font-size:11px;color:var(--ink3)}
+.stat-card.peri .stat-val{color:var(--red)}
+.stat-card.area .stat-val{color:var(--grass)}
+.stat-formula{font-family:var(--serif);font-style:italic;font-size:11px;color:var(--ink3);margin-top:3px}
+
+/* ── FARM CANVAS ── */
+.farm-wrap{background:#fff;border:2px solid var(--rule);border-radius:12px;overflow:hidden;margin-bottom:14px;box-shadow:0 4px 16px rgba(0,0,0,0.1)}
+#farm-canvas{display:block;width:100%;height:auto;cursor:crosshair;touch-action:none}
+
+/* ── CONTROLS ── */
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.ctrl-btn{display:flex;align-items:center;gap:6px;padding:9px 18px;
   background:var(--paper2);border:2px solid var(--rule);border-radius:8px;
-  font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.5px;
-  cursor:pointer;transition:.2s;color:var(--ink2);
-}
-.mode-btn.on{background:var(--earth-light);border-color:var(--earth);color:var(--earth2)}
-.mode-btn:hover:not(.on){border-color:var(--grass)}
-.mode-icon{font-size:18px}
+  font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;transition:.18s;color:var(--ink2)}
+.ctrl-btn.on{background:var(--grass2);border-color:var(--grass2);color:#F0FFE0}
+.ctrl-btn:hover:not(.on){border-color:var(--grass)}
+.clear-btn{padding:9px 16px;background:var(--paper2);border:2px solid var(--rule);border-radius:8px;
+  font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;color:var(--ink2);transition:.18s}
+.clear-btn:hover{border-color:var(--red);color:var(--red)}
+.hint-txt{font-family:var(--serif);font-style:italic;font-size:12px;color:var(--ink3);padding-left:2px}
 
-/* STATS */
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-.stat-card{background:var(--paper);border:2px solid var(--rule);border-radius:10px;padding:16px 18px;text-align:center}
-.stat-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:4px}
-.stat-value{font-family:var(--mono);font-size:32px;font-weight:700}
-.stat-unit{font-family:var(--mono);font-size:12px;color:var(--ink3)}
-.stat-p .stat-value{color:var(--red)}
-.stat-a .stat-value{color:var(--grass)}
-
-/* CHALLENGE */
-.challenge-area{background:var(--earth-light);border:2px solid var(--earth);border-radius:10px;padding:16px 18px;margin-bottom:16px}
-.challenge-title{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--earth2);margin-bottom:6px}
-.challenge-text{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--ink);line-height:1.6}
-.challenge-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.ch-btn{padding:7px 16px;background:var(--earth);color:#fff;border:none;border-radius:6px;
+/* ── CHALLENGE CARD ── */
+.challenge-card{background:var(--earth-light);border:2px solid var(--earth);border-radius:10px;padding:14px 18px;margin-bottom:12px}
+.ch-tag{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--earth2);margin-bottom:6px}
+.ch-q{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--ink);line-height:1.6;margin-bottom:10px}
+.ch-btns{display:flex;gap:8px;flex-wrap:wrap}
+.ch-btn{padding:8px 16px;background:var(--earth2);color:#fff;border:none;border-radius:7px;
   font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;transition:.15s}
-.ch-btn:hover{background:var(--earth2)}
+.ch-btn:hover{background:var(--earth)}
+.ch-btn.on{outline:2px solid #fff;outline-offset:2px}
 
-/* REVEAL */
-.reveal-box{background:#FEF9C3;border:2px solid #CA8A04;border-radius:10px;padding:14px 18px;margin-bottom:16px;display:none}
-.reveal-box.show{display:block;animation:slideIn .4s ease}
-.reveal-text{font-family:var(--serif);font-style:italic;font-size:15px;color:#78350F;line-height:1.7}
-@keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+/* ── INSIGHT BOX ── */
+.insight{background:#FEF9C3;border:2px solid #CA8A04;border-radius:10px;padding:14px 18px;margin-bottom:12px;display:none}
+.insight.show{display:block;animation:slideIn .3s ease}
+.insight-head{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#92400E;margin-bottom:5px}
+.insight-text{font-family:var(--serif);font-style:italic;font-size:14px;color:#78350F;line-height:1.7}
+.insight-text strong{font-style:normal}
+@keyframes slideIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
 
-/* PRACTICE */
-.practice-card{background:var(--paper);border:2px solid var(--rule);border-radius:12px;padding:20px;margin-bottom:16px}
-.practice-q{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--ink);margin-bottom:16px;line-height:1.6}
+/* ── PRACTICE ── */
+.prac-card{background:#fff;border:2px solid var(--rule);border-radius:12px;padding:20px;margin-bottom:14px}
+.prac-q{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--ink);margin-bottom:14px;line-height:1.6}
 .ans-opts{display:flex;gap:8px;flex-wrap:wrap}
-.ans-opt{padding:10px 20px;background:var(--paper2);border:2px solid var(--rule);border-radius:8px;
-  font-family:var(--mono);font-size:15px;font-weight:700;cursor:pointer;transition:.2s;color:var(--ink)}
-.ans-opt:hover{border-color:var(--grass);background:#DCFCE7;color:var(--grass2)}
-.ans-opt.correct{background:#DCFCE7;border-color:#16A34A;color:#14532D;animation:pop .35s ease}
-.ans-opt.wrong{background:#FEE2E2;border-color:#DC2626;color:#7F1D1D;animation:shk .35s ease}
-@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
-@keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-.pq-fb{min-height:24px;margin-top:12px;font-family:var(--serif);font-style:italic;font-size:14px}
+.ans-opt{padding:10px 18px;background:var(--paper2);border:2px solid var(--rule);border-radius:8px;
+  font-family:var(--mono);font-size:13px;font-weight:700;cursor:pointer;transition:.2s;color:var(--ink)}
+.ans-opt:hover{border-color:var(--grass);background:#DCFCE7}
+.ans-opt.correct{background:#DCFCE7;border-color:#16A34A;color:#14532D;animation:cpop .35s}
+.ans-opt.wrong{background:#FEE2E2;border-color:#DC2626;color:#7F1D1D;animation:cshk .35s}
+.pq-fb{min-height:22px;margin-top:10px;font-family:var(--serif);font-style:italic;font-size:14px}
 .pq-fb.ok{color:#16A34A}.pq-fb.no{color:#DC2626}
-.next-btn{margin-top:14px;background:var(--grass);color:#fff;border:none;border-radius:8px;padding:10px 24px;
+.next-btn{margin-top:12px;background:var(--grass);color:#fff;border:none;border-radius:8px;padding:10px 22px;
   font-family:var(--mono);font-size:12px;font-weight:700;cursor:pointer;transition:.15s}
 .next-btn:hover{background:var(--grass2)}
 
-.reset-btn{background:var(--paper2);border:2px solid var(--rule);border-radius:8px;padding:8px 16px;
-  font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;color:var(--ink2);transition:.2s}
-.reset-btn:hover{border-color:var(--red);color:var(--red)}
-
-.pnl{display:none}.pnl.on{display:block}
+@keyframes cpop{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+@keyframes cshk{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 
 @media(max-width:600px){
   .header{height:auto;padding:10px 16px;flex-wrap:wrap;gap:8px}
   .header-tabs{width:100%;justify-content:center}
-  .stats{grid-template-columns:1fr 1fr}
-  .stat-value{font-size:24px}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .stat-val{font-size:22px}
 }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <svg width="36" height="36" viewBox="0 0 36 36" style="flex-shrink:0">
-    <rect x="2" y="2" width="32" height="32" rx="6" fill="rgba(255,255,255,0.15)"/>
-    <rect x="8" y="8" width="20" height="20" fill="none" stroke="#A8D878" stroke-width="2" stroke-dasharray="3,2"/>
-    <path d="M8 8 L28 8 L28 28 L8 28 Z" fill="rgba(168,216,120,0.2)"/>
-    <rect x="6" y="7" width="24" height="2" rx="1" fill="#D4A843"/>
+  <svg width="34" height="34" viewBox="0 0 34 34" style="flex-shrink:0">
+    <rect x="4" y="4" width="26" height="26" rx="4" fill="rgba(255,255,255,0.12)"/>
+    <rect x="8" y="8" width="18" height="18" fill="rgba(200,238,160,0.25)" stroke="#A8D878" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <line x1="8" y1="8" x2="26" y2="8" stroke="#D4B870" stroke-width="3" stroke-linecap="round"/>
+    <line x1="8" y1="26" x2="26" y2="26" stroke="#D4B870" stroke-width="3" stroke-linecap="round"/>
+    <line x1="8" y1="8" x2="8" y2="26" stroke="#D4B870" stroke-width="3" stroke-linecap="round"/>
+    <line x1="26" y1="8" x2="26" y2="26" stroke="#D4B870" stroke-width="3" stroke-linecap="round"/>
   </svg>
   <div>
     <div class="header-title">Fence Builder Farm</div>
@@ -124,271 +135,600 @@ html,body{width:100%;min-height:100vh;background:var(--paper);color:var(--ink);f
 
 <div class="main">
 
+<!-- ══ FARM TAB ══ -->
 <div class="pnl on" id="pnl-farm">
-  <div class="stats">
-    <div class="stat-card stat-p">
-      <div class="stat-label">Perimeter (Fence used)</div>
-      <div class="stat-value" id="peri-val">0</div>
-      <div class="stat-unit">metres</div>
-    </div>
-    <div class="stat-card stat-a">
-      <div class="stat-label">Area (Grass inside)</div>
-      <div class="stat-value" id="area-val">0</div>
-      <div class="stat-unit">m²</div>
+
+  <!-- Concept banner -->
+  <div class="concept">
+    <div class="concept-icon">🌿</div>
+    <div>
+      <div class="concept-title">What are Perimeter &amp; Area?</div>
+      <div class="concept-text">
+        <strong>Perimeter</strong> is the total length of the fence — the distance all the way around the outside.
+        <strong>Area</strong> is the amount of grass enclosed inside.
+        Click on the <strong>edges between squares</strong> to place fence posts, then close your shape to see both values calculated automatically!
+      </div>
     </div>
   </div>
 
-  <div class="controls">
-    <button class="mode-btn on" id="mb-fence" onclick="setMode('fence')">
-      <span class="mode-icon">🪵</span> Fence mode
-    </button>
-    <button class="mode-btn" id="mb-paint" onclick="setMode('paint')">
-      <span class="mode-icon">🌿</span> Fill mode
-    </button>
-    <button class="reset-btn" onclick="resetFarm()">✕ Clear</button>
-    <div style="font-family:var(--mono);font-size:10px;color:var(--ink3);padding-left:4px">Click grid squares to place fence</div>
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card peri">
+      <div class="stat-icon">🪵</div>
+      <div class="stat-body">
+        <div class="stat-label">Perimeter · Fence length</div>
+        <div class="stat-row">
+          <div class="stat-val" id="peri-val">0</div>
+          <div class="stat-unit">m</div>
+        </div>
+        <div class="stat-formula">= total edge length around shape</div>
+      </div>
+    </div>
+    <div class="stat-card area">
+      <div class="stat-icon">🌾</div>
+      <div class="stat-body">
+        <div class="stat-label">Area · Grass inside</div>
+        <div class="stat-row">
+          <div class="stat-val" id="area-val">0</div>
+          <div class="stat-unit">m²</div>
+        </div>
+        <div class="stat-formula" id="area-formula">= squares fully enclosed</div>
+      </div>
+    </div>
   </div>
 
+  <!-- Canvas -->
   <div class="farm-wrap">
     <canvas id="farm-canvas"></canvas>
   </div>
 
-  <div class="challenge-area">
-    <div class="challenge-title">Challenge</div>
-    <div class="challenge-text" id="ch-text">Draw a fence enclosure on the grid. Switch to Fill mode to colour the inside. Discover how perimeter and area relate!</div>
-    <div class="challenge-btns">
-      <button class="ch-btn" onclick="setChallenge('biggest')">Biggest area with 20m fence</button>
-      <button class="ch-btn" onclick="setChallenge('smallest')">Smallest area with 20m fence</button>
-      <button class="ch-btn" onclick="setChallenge('equal-p')">Equal perimeter, different area</button>
+  <!-- Controls -->
+  <div class="controls">
+    <button class="ctrl-btn on" id="mb-fence" onclick="setMode('fence')">🪵 Draw Fence</button>
+    <button class="clear-btn" onclick="resetFarm()">✕ Clear all</button>
+    <span class="hint-txt" id="hint-txt">Click on grid lines to place fence. Close a shape to measure area.</span>
+  </div>
+
+  <!-- Challenge -->
+  <div class="challenge-card">
+    <div class="ch-tag">Challenges</div>
+    <div class="ch-q" id="ch-q">Pick a challenge below, or draw freely to explore how perimeter and area relate.</div>
+    <div class="ch-btns">
+      <button class="ch-btn" id="chl-max"  onclick="setChallenge('max')">Biggest area, 20 m fence</button>
+      <button class="ch-btn" id="chl-min"  onclick="setChallenge('min')">Smallest area, 20 m fence</button>
+      <button class="ch-btn" id="chl-same" onclick="setChallenge('same')">Same perimeter, different area</button>
     </div>
   </div>
 
-  <div class="reveal-box" id="reveal-box">
-    <div class="reveal-text" id="reveal-text"></div>
+  <!-- Insight -->
+  <div class="insight" id="insight">
+    <div class="insight-head">💡 Insight</div>
+    <div class="insight-text" id="insight-text"></div>
   </div>
-</div>
 
+</div><!-- /pnl-farm -->
+
+<!-- ══ PRACTICE TAB ══ -->
 <div class="pnl" id="pnl-practice">
-  <div class="practice-card">
-    <div class="practice-q" id="pq-text">Loading…</div>
+  <div class="concept">
+    <div class="concept-icon">📐</div>
+    <div>
+      <div class="concept-title">Quick-fire Practice</div>
+      <div class="concept-text">Test what you know about <strong>perimeter</strong> (distance around) and <strong>area</strong> (space inside).</div>
+    </div>
+  </div>
+  <div class="prac-card">
+    <div class="prac-q" id="pq-text">Loading…</div>
     <div class="ans-opts" id="pq-opts"></div>
     <div class="pq-fb" id="pq-fb"></div>
-    <button class="next-btn" onclick="nextPQ()">Next →</button>
+    <button class="next-btn" onclick="nextPQ()">Next question →</button>
   </div>
 </div>
 
-</div>
+</div><!-- /main -->
 
 <script>
-// -- GRID SETUP --
-const CELL = 32;
-const COLS = 15, ROWS = 12;
+// ═══════════════════════════════════════════════════════════════════════════
+//  CORE MODEL
+//  The grid has COLS × ROWS cells, each 1 m × 1 m.
+//  Fence lives on EDGES — the lines between cells (and the border).
+//
+//  Horizontal edges: hEdge[row][col]  — the edge above cell (row, col)
+//    row ∈ 0..ROWS  (ROWS+1 rows of horizontal edges)
+//    col ∈ 0..COLS-1
+//
+//  Vertical edges: vEdge[row][col]  — the edge to the left of cell (row, col)
+//    row ∈ 0..ROWS-1
+//    col ∈ 0..COLS  (COLS+1 columns of vertical edges)
+//
+//  Area is flood-filled from the outside; any cell not reachable from outside
+//  without crossing a fence edge is "enclosed" and counts towards area.
+// ═══════════════════════════════════════════════════════════════════════════
+
+const COLS = 14, ROWS = 11;
+const CELL = 36; // logical pixels per cell
+
 const cvs = document.getElementById('farm-canvas');
-const ctx = cvs.getContext('2d');
+const ctx  = cvs.getContext('2d');
 
-// Make canvas responsive
-function resize(){
-  const wrap = cvs.parentElement;
-  const maxW = Math.min(wrap.clientWidth, 900);
-  const scale = maxW / (COLS*CELL);
-  cvs.width = COLS*CELL;
-  cvs.height = ROWS*CELL;
-  cvs.style.width = maxW+'px';
-  cvs.style.height = Math.round(ROWS*CELL*scale)+'px';
+// Edge state arrays — true = fence placed
+let hEdge, vEdge;
+
+function initEdges() {
+  hEdge = Array.from({ length: ROWS + 1 }, () => Array(COLS).fill(false));
+  vEdge = Array.from({ length: ROWS },     () => Array(COLS + 1).fill(false));
 }
-resize();
-window.addEventListener('resize', ()=>{resize();draw()});
+initEdges();
 
-let grid = Array.from({length:ROWS},()=>Array(COLS).fill(0));
-// grid values: 0=empty, 1=fence, 2=grass
-let mode = 'fence';
-let painting = false;
+// ── Canvas sizing ────────────────────────────────────────────────────────────
+function resizeCvs() {
+  const maxW = Math.min(cvs.parentElement.clientWidth || 600, 800);
+  cvs.width  = COLS * CELL;
+  cvs.height = ROWS * CELL;
+  cvs.style.width  = maxW + 'px';
+  cvs.style.height = Math.round(ROWS * CELL * maxW / (COLS * CELL)) + 'px';
+}
+resizeCvs();
+window.addEventListener('resize', () => { resizeCvs(); draw(); });
 
-// -- DRAWING --
-function draw(){
-  const W=COLS*CELL, H=ROWS*CELL;
-  // Sky / ground
-  ctx.fillStyle='#B8D8E8'; ctx.fillRect(0,0,W,H);
-  // Ground rows
-  for(let r=0;r<ROWS;r++){
-    const g=ctx.createLinearGradient(0,r*CELL,0,(r+1)*CELL);
-    g.addColorStop(0,r%2===0?'#4A8C2A':'#3D7A23');
-    g.addColorStop(1,r%2===0?'#3D7A23':'#356B1E');
-    ctx.fillStyle=g;
-    ctx.fillRect(0,r*CELL,W,CELL);
+// ── Flood-fill to find enclosed cells ────────────────────────────────────────
+// We treat the canvas as a (COLS+2) × (ROWS+2) grid of "virtual" cells
+// (adding a 1-cell border of outside air). We flood from (-1,-1) outward.
+// A move from cell (r,c) to (r, c+1) is blocked if vEdge[r][c+1] is set.
+// A move from cell (r,c) to (r+1, c) is blocked if hEdge[r+1][c] is set.
+// Cells in the virtual border are always "outside".
+
+function computeEnclosed() {
+  // outside[r][c] = true means cell (r,c) is reachable from outside
+  const outside = Array.from({ length: ROWS }, () => Array(COLS).fill(false));
+
+  // BFS from every virtual-border cell (those touching a real outside edge)
+  const queue = [];
+  // Seed: all real cells on the actual grid border that are not fenced in
+  // We start from a virtual cell "(-1, -1)" by seeding all real border cells
+  // that are directly accessible from outside (no fence on their outer edge).
+
+  // Helper: can we move from real cell (r,c) to neighbour (nr,nc)?
+  function canMove(r, c, nr, nc) {
+    if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS) return true; // neighbour is outside
+    const dr = nr - r, dc = nc - c;
+    if (dr === -1) return !hEdge[r][c];      // moving up: blocked by hEdge[r][c]
+    if (dr ===  1) return !hEdge[r+1][c];    // moving down: blocked by hEdge[r+1][c]
+    if (dc === -1) return !vEdge[r][c];      // moving left: blocked by vEdge[r][c]
+    if (dc ===  1) return !vEdge[r][c+1];   // moving right: blocked by vEdge[r][c+1]
+    return true;
   }
 
-  // Grid lines
-  ctx.strokeStyle='rgba(255,255,255,0.12)';ctx.lineWidth=0.5;
-  for(let c=0;c<=COLS;c++){ctx.beginPath();ctx.moveTo(c*CELL,0);ctx.lineTo(c*CELL,H);ctx.stroke()}
-  for(let r=0;r<=ROWS;r++){ctx.beginPath();ctx.moveTo(0,r*CELL);ctx.lineTo(W,r*CELL);ctx.stroke()}
+  // Seed queue with all border cells of the real grid
+  function tryAdd(r, c) {
+    if (r < 0 || r >= ROWS || c < 0 || c >= COLS) return;
+    if (outside[r][c]) return;
+    outside[r][c] = true;
+    queue.push([r, c]);
+  }
 
-  // Cells
-  for(let r=0;r<ROWS;r++){
-    for(let c=0;c<COLS;c++){
-      const v=grid[r][c];
-      const x=c*CELL,y=r*CELL;
-      if(v===2){
-        // Grass fill
-        ctx.fillStyle='#A8D878';
-        ctx.globalAlpha=0.7;
-        ctx.fillRect(x+1,y+1,CELL-2,CELL-2);
-        ctx.globalAlpha=1;
-        // grass texture dots
-        ctx.fillStyle='#6AAB40';
-        for(let i=0;i<4;i++){
-          ctx.beginPath();ctx.arc(x+6+i*7,y+CELL/2+((i%2)-.5)*4,1.5,0,Math.PI*2);ctx.fill();
+  for (let c = 0; c < COLS; c++) {
+    if (!hEdge[0][c])    tryAdd(0, c);        // top edge open
+    if (!hEdge[ROWS][c]) tryAdd(ROWS-1, c);   // bottom edge open
+  }
+  for (let r = 0; r < ROWS; r++) {
+    if (!vEdge[r][0])    tryAdd(r, 0);        // left edge open
+    if (!vEdge[r][COLS]) tryAdd(r, COLS-1);   // right edge open
+  }
+
+  // BFS
+  while (queue.length) {
+    const [r, c] = queue.shift();
+    for (const [nr, nc] of [[r-1,c],[r+1,c],[r,c-1],[r,c+1]]) {
+      if (nr < 0 || nr >= ROWS || nc < 0 || nc >= COLS) continue;
+      if (outside[nr][nc]) continue;
+      if (canMove(r, c, nr, nc)) tryAdd(nr, nc);
+    }
+  }
+
+  return outside;
+}
+
+// ── Count fence edges ─────────────────────────────────────────────────────────
+function countFence() {
+  let n = 0;
+  for (let r = 0; r <= ROWS; r++) for (let c = 0; c < COLS; c++) if (hEdge[r][c]) n++;
+  for (let r = 0; r < ROWS;  r++) for (let c = 0; c <= COLS; c++) if (vEdge[r][c]) n++;
+  return n;
+}
+
+// ── Draw ──────────────────────────────────────────────────────────────────────
+function draw() {
+  const W = cvs.width, H = cvs.height;
+  const outside = computeEnclosed();
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Ground: alternating slightly different greens per row
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const enclosed = !outside[r][c];
+      // Base fill
+      ctx.fillStyle = enclosed ? '#B8E890' : (r + c) % 2 === 0 ? '#4A8C2A' : '#3D7A23';
+      ctx.fillRect(c * CELL, r * CELL, CELL, CELL);
+      // Enclosed grass texture
+      if (enclosed) {
+        ctx.fillStyle = 'rgba(80,160,40,0.25)';
+        for (const [ox, oy] of [[0.2,0.3],[0.5,0.6],[0.75,0.25],[0.4,0.75]]) {
+          ctx.beginPath();
+          ctx.arc(c*CELL + ox*CELL, r*CELL + oy*CELL, 1.8, 0, Math.PI*2);
+          ctx.fill();
         }
-      }
-      if(v===1){
-        // Fence post
-        ctx.fillStyle='#D4B870';
-        ctx.fillRect(x+2,y+2,CELL-4,CELL-4);
-        ctx.fillStyle='#B89A40';
-        ctx.fillRect(x+2,y+2,CELL-4,6);
-        // Wood grain
-        ctx.strokeStyle='rgba(120,80,20,0.3)';ctx.lineWidth=1;
-        ctx.beginPath();ctx.moveTo(x+4,y+4);ctx.lineTo(x+CELL-4,y+4);ctx.stroke();
-        ctx.beginPath();ctx.moveTo(x+4,y+10);ctx.lineTo(x+CELL-4,y+10);ctx.stroke();
+      } else {
+        // Subtle texture on outside grass
+        ctx.fillStyle = 'rgba(255,255,255,0.04)';
+        ctx.fillRect(c*CELL, r*CELL, CELL, CELL);
       }
     }
   }
 
-  // Sheep emoji if area detected
-  const areaCount=grid.flat().filter(v=>v===2).length;
-  if(areaCount>4){
-    const sheep=['?','?','?'];
-    const grassCells=[];
-    for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)if(grid[r][c]===2)grassCells.push({r,c});
-    if(grassCells.length){
-      ctx.font=`${Math.round(CELL*0.7)}px serif`;
-      ctx.textAlign='center';ctx.textBaseline='middle';
-      const picks=grassCells.slice(0,Math.min(3,grassCells.length));
-      picks.forEach((cell,i)=>{
-        ctx.fillText(sheep[i]||'?',cell.c*CELL+CELL/2,cell.r*CELL+CELL/2);
-      });
+  // Grid lines (faint)
+  ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+  ctx.lineWidth = 0.5;
+  for (let c = 0; c <= COLS; c++) {
+    ctx.beginPath(); ctx.moveTo(c*CELL, 0); ctx.lineTo(c*CELL, H); ctx.stroke();
+  }
+  for (let r = 0; r <= ROWS; r++) {
+    ctx.beginPath(); ctx.moveTo(0, r*CELL); ctx.lineTo(W, r*CELL); ctx.stroke();
+  }
+
+  // ── Draw fence edges ────────────────────────────────────────────────────────
+  // Horizontal fences
+  for (let r = 0; r <= ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      if (hEdge[r][c]) drawFenceH(c, r);
+    }
+  }
+  // Vertical fences
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c <= COLS; c++) {
+      if (vEdge[r][c]) drawFenceV(c, r);
     }
   }
 
-  updateStats();
-}
+  // ── Hover ghost ─────────────────────────────────────────────────────────────
+  if (hoverEdge) {
+    ctx.globalAlpha = 0.45;
+    if (hoverEdge.type === 'h') drawFenceH(hoverEdge.c, hoverEdge.r);
+    else                         drawFenceV(hoverEdge.c, hoverEdge.r);
+    ctx.globalAlpha = 1;
+  }
 
-// -- STATS --
-function updateStats(){
-  const fenceCount = grid.flat().filter(v=>v===1).length;
-  const areaCount = grid.flat().filter(v=>v===2).length;
-  document.getElementById('peri-val').textContent=fenceCount;
-  document.getElementById('area-val').textContent=areaCount;
-  checkReveal(fenceCount,areaCount);
-}
+  // ── Grid labels ─────────────────────────────────────────────────────────────
+  ctx.fillStyle = 'rgba(255,255,255,0.55)';
+  ctx.font = `bold ${Math.round(CELL * 0.28)}px "Space Mono",monospace`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  for (let c = 0; c < COLS; c++)
+    ctx.fillText(c + 1, c * CELL + CELL/2, H - CELL*0.15);
+  ctx.textAlign = 'right';
+  for (let r = 0; r < ROWS; r++)
+    ctx.fillText(r + 1, CELL * 0.22, r * CELL + CELL/2);
 
-function checkReveal(p,a){
-  const rb=document.getElementById('reveal-box');
-  const rt=document.getElementById('reveal-text');
-  if(p>=8&&a>=0){
-    const msg=a===0?`You have ${p} metres of fence but no enclosed area yet. Use Fill mode to colour the inside!`
-      :`With ${p}m of fence you enclosed ${a}m? of grass. ${p===a?'':'Try changing the shape - does a different rectangle with '+p+'m of fence give more grass?'}`;
-    rt.textContent=msg;
-    rb.classList.add('show');
-  } else {rb.classList.remove('show')}
-}
+  // ── Sheep in enclosed area ───────────────────────────────────────────────────
+  const enclosedCells = [];
+  for (let r = 0; r < ROWS; r++)
+    for (let c = 0; c < COLS; c++)
+      if (!outside[r][c]) enclosedCells.push([r, c]);
 
-// -- INTERACTION --
-function cellFromEvent(e){
-  const rect=cvs.getBoundingClientRect();
-  const scaleX=cvs.width/rect.width;
-  const px=(e.clientX-rect.left)*scaleX;
-  const py=(e.clientY-rect.top)*scaleX;
-  return{c:Math.floor(px/CELL),r:Math.floor(py/CELL)};
-}
+  if (enclosedCells.length >= 2) {
+    const emojis = ['🐑','🐑','🐑'];
+    ctx.font = `${Math.round(CELL * 0.62)}px serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const picks = enclosedCells.slice(0, Math.min(3, enclosedCells.length));
+    picks.forEach(([r, c], i) => {
+      ctx.fillText(emojis[i] || '🐑', c * CELL + CELL/2, r * CELL + CELL/2);
+    });
+  }
 
-function handleCell(e){
-  const{r,c}=cellFromEvent(e);
-  if(r<0||r>=ROWS||c<0||c>=COLS)return;
-  if(mode==='fence'){
-    grid[r][c]=grid[r][c]===1?0:1;
+  // ── Update stats ─────────────────────────────────────────────────────────────
+  const p = countFence();
+  const a = enclosedCells.length;
+  document.getElementById('peri-val').textContent = p;
+  document.getElementById('area-val').textContent = a;
+
+  // Formula hint
+  if (a > 0) {
+    document.getElementById('area-formula').textContent = `${Math.round(a / 1)} m² enclosed inside`;
   } else {
-    grid[r][c]=grid[r][c]===2?0:2;
+    document.getElementById('area-formula').textContent = 'close a shape to measure';
+  }
+
+  updateInsight(p, a);
+}
+
+// ── Fence drawing helpers ────────────────────────────────────────────────────
+function drawFenceH(c, r) {
+  // Horizontal fence: runs along the top of row r (= bottom of row r-1)
+  const x1 = c * CELL, x2 = (c+1) * CELL, y = r * CELL;
+  // Shadow
+  ctx.strokeStyle = 'rgba(0,0,0,0.3)'; ctx.lineWidth = 6; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(x1 + 2, y + 1); ctx.lineTo(x2 - 2, y + 1); ctx.stroke();
+  // Plank
+  ctx.strokeStyle = '#D4B870'; ctx.lineWidth = 5; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(x1 + 2, y); ctx.lineTo(x2 - 2, y); ctx.stroke();
+  // Highlight
+  ctx.strokeStyle = 'rgba(255,240,180,0.5)'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(x1 + 3, y - 1); ctx.lineTo(x2 - 3, y - 1); ctx.stroke();
+  // Posts at each end
+  drawPost(x1, y); drawPost(x2, y);
+}
+
+function drawFenceV(c, r) {
+  // Vertical fence: runs along the left of column c (= right of column c-1)
+  const x = c * CELL, y1 = r * CELL, y2 = (r+1) * CELL;
+  ctx.strokeStyle = 'rgba(0,0,0,0.3)'; ctx.lineWidth = 6; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(x + 1, y1 + 2); ctx.lineTo(x + 1, y2 - 2); ctx.stroke();
+  ctx.strokeStyle = '#D4B870'; ctx.lineWidth = 5; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(x, y1 + 2); ctx.lineTo(x, y2 - 2); ctx.stroke();
+  ctx.strokeStyle = 'rgba(255,240,180,0.5)'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(x - 1, y1 + 3); ctx.lineTo(x - 1, y2 - 3); ctx.stroke();
+  drawPost(x, y1); drawPost(x, y2);
+}
+
+function drawPost(x, y) {
+  ctx.fillStyle = '#B89A40';
+  ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#E0C870';
+  ctx.beginPath(); ctx.arc(x - 1, y - 1, 1.5, 0, Math.PI*2); ctx.fill();
+}
+
+// ── Hover state ──────────────────────────────────────────────────────────────
+let hoverEdge = null;
+
+// Convert mouse/touch position → nearest edge
+function nearestEdge(clientX, clientY) {
+  const rect = cvs.getBoundingClientRect();
+  const sx   = cvs.width / rect.width;
+  const px   = (clientX - rect.left) * sx;
+  const py   = (clientY - rect.top)  * sx;
+
+  // Snap to nearest grid line (both H and V) and pick whichever is closer
+  const col = px / CELL;   // fractional column
+  const row = py / CELL;   // fractional row
+
+  const nearC = Math.round(col);  // nearest vertical line (x = nearC * CELL)
+  const nearR = Math.round(row);  // nearest horizontal line (y = nearR * CELL)
+
+  const distV = Math.abs(px - nearC * CELL);  // distance to nearest vertical line
+  const distH = Math.abs(py - nearR * CELL);  // distance to nearest horizontal line
+
+  const SNAP = CELL * 0.35; // snap threshold
+
+  if (distV < distH && distV < SNAP) {
+    // Nearest is a vertical fence line
+    const c = nearC, r = Math.floor(row);
+    if (c >= 0 && c <= COLS && r >= 0 && r < ROWS) return { type: 'v', c, r };
+  } else if (distH < SNAP) {
+    // Nearest is a horizontal fence line
+    const c = Math.floor(col), r = nearR;
+    if (c >= 0 && c < COLS && r >= 0 && r <= ROWS) return { type: 'h', c, r };
+  }
+  return null;
+}
+
+function toggleEdge(edge) {
+  if (!edge) return;
+  if (edge.type === 'h') {
+    hEdge[edge.r][edge.c] = !hEdge[edge.r][edge.c];
+  } else {
+    vEdge[edge.r][edge.c] = !vEdge[edge.r][edge.c];
   }
   draw();
 }
 
-cvs.addEventListener('mousedown',e=>{painting=true;handleCell(e)});
-cvs.addEventListener('mousemove',e=>{if(painting)handleCell(e)});
-cvs.addEventListener('mouseup',()=>painting=false);
-cvs.addEventListener('mouseleave',()=>painting=false);
-cvs.addEventListener('touchstart',e=>{e.preventDefault();painting=true;handleCell(e.touches[0])},{passive:false});
-cvs.addEventListener('touchmove',e=>{e.preventDefault();if(painting)handleCell(e.touches[0])},{passive:false});
-cvs.addEventListener('touchend',()=>painting=false);
+// ── Event listeners ───────────────────────────────────────────────────────────
+let pointerDown = false;
+let lastToggled = null;
 
-function setMode(m){
-  mode=m;
-  document.getElementById('mb-fence').classList.toggle('on',m==='fence');
-  document.getElementById('mb-paint').classList.toggle('on',m==='paint');
+function onPointerMove(clientX, clientY) {
+  const e = nearestEdge(clientX, clientY);
+  hoverEdge = e;
+  if (pointerDown && e) {
+    const key = e.type + e.r + ',' + e.c;
+    if (key !== lastToggled) { lastToggled = key; toggleEdge(e); }
+    else draw();
+  } else draw();
 }
 
-function resetFarm(){
-  grid=Array.from({length:ROWS},()=>Array(COLS).fill(0));
+cvs.addEventListener('mousedown', e => {
+  pointerDown = true; lastToggled = null;
+  const ed = nearestEdge(e.clientX, e.clientY);
+  if (ed) { lastToggled = ed.type + ed.r + ',' + ed.c; toggleEdge(ed); }
+});
+window.addEventListener('mouseup',   () => { pointerDown = false; });
+cvs.addEventListener('mousemove',    e => onPointerMove(e.clientX, e.clientY));
+cvs.addEventListener('mouseleave',   () => { hoverEdge = null; draw(); });
+
+cvs.addEventListener('touchstart', e => {
+  e.preventDefault(); pointerDown = true; lastToggled = null;
+  const t = e.touches[0];
+  const ed = nearestEdge(t.clientX, t.clientY);
+  if (ed) { lastToggled = ed.type + ed.r + ',' + ed.c; toggleEdge(ed); }
+}, { passive: false });
+cvs.addEventListener('touchmove', e => {
+  e.preventDefault();
+  const t = e.touches[0]; onPointerMove(t.clientX, t.clientY);
+}, { passive: false });
+cvs.addEventListener('touchend', () => { pointerDown = false; });
+
+// ── Mode (kept for future but only fence mode currently) ─────────────────────
+function setMode(m) {
+  document.getElementById('mb-fence').classList.toggle('on', m === 'fence');
+}
+
+// ── Reset ─────────────────────────────────────────────────────────────────────
+function resetFarm() {
+  initEdges();
+  hoverEdge = null;
+  document.querySelectorAll('.ch-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById('ch-q').textContent = 'Pick a challenge below, or draw freely to explore how perimeter and area relate.';
+  hideInsight();
   draw();
-  document.getElementById('reveal-box').classList.remove('show');
 }
 
-// -- CHALLENGES --
-function setChallenge(t){
-  const msgs={
-    'biggest':'Use EXACTLY 20 fence squares to make the biggest possible enclosed area. Hint: squares are usually better than long thin rectangles!',
-    'smallest':'Use EXACTLY 20 fence squares to make the smallest possible enclosed area. Try a very long, thin shape!',
-    'equal-p':'Draw two shapes that both have the same perimeter. Do they have the same area inside? (They won\'t - and that\'s the big idea!)',
-  };
-  document.getElementById('ch-text').textContent=msgs[t];
+// ── Insight logic ─────────────────────────────────────────────────────────────
+function hideInsight() { document.getElementById('insight').classList.remove('show'); }
+
+let challengeMode = null;
+
+function updateInsight(p, a) {
+  const box  = document.getElementById('insight');
+  const text = document.getElementById('insight-text');
+
+  if (p === 0) { hideInsight(); return; }
+
+  if (challengeMode === 'max') {
+    if (p === 20) {
+      if (a >= 24) {
+        text.innerHTML = `✓ Excellent! With <strong>20 m</strong> of fence you enclosed <strong>${a} m²</strong>. A 5×5 square (perimeter 20) encloses 25 m² — the maximum possible. <em>Squares and near-squares give the most area for the same perimeter!</em>`;
+      } else if (a > 0) {
+        text.innerHTML = `You've used <strong>20 m</strong> of fence and enclosed <strong>${a} m²</strong>. Can you reshape it to enclose more? Try making it closer to a square — 5×5 would give 25 m²!`;
+      } else {
+        text.innerHTML = `You have <strong>20 m</strong> of fence placed but no enclosed area yet. Make sure your shape is fully closed — all edges connected!`;
+      }
+      box.classList.add('show'); return;
+    } else if (p > 0) {
+      text.innerHTML = `You have <strong>${p} m</strong> of fence. For this challenge, use exactly <strong>20 m</strong> — add or remove edges to reach 20.`;
+      box.classList.add('show'); return;
+    }
+  }
+
+  if (challengeMode === 'min') {
+    if (p === 20) {
+      if (a <= 9 && a > 0) {
+        text.innerHTML = `Nice — with <strong>20 m</strong> of fence you only enclosed <strong>${a} m²</strong>. Long thin shapes waste a lot of fence on perimeter. A 1×9 rectangle uses 20 m and encloses just 9 m².`;
+      } else if (a > 9) {
+        text.innerHTML = `You enclosed <strong>${a} m²</strong> with 20 m of fence. Try a much longer, thinner shape — like 1×9 — to make the area smaller!`;
+      } else if (a === 0) {
+        text.innerHTML = `Fence placed but shape isn't closed yet. Close it to measure the area.`;
+      }
+      box.classList.add('show'); return;
+    } else if (p > 0) {
+      text.innerHTML = `You have <strong>${p} m</strong> of fence. For this challenge, aim for exactly <strong>20 m</strong>.`;
+      box.classList.add('show'); return;
+    }
+  }
+
+  if (challengeMode === 'same') {
+    if (a > 0 && p > 0) {
+      text.innerHTML = `Your shape: perimeter = <strong>${p} m</strong>, area = <strong>${a} m²</strong>. Now clear and draw a <em>different shape</em> with the same perimeter (<strong>${p} m</strong>) — does it have the same area? It won't! This is the key idea: <em>same perimeter ≠ same area</em>.`;
+      box.classList.add('show'); return;
+    }
+  }
+
+  // Free-draw mode — show useful insight when shape is closed
+  if (a > 0 && p > 0) {
+    // Compute ratio
+    const ratio = (a / (p * p) * 16).toFixed(2);
+    let msg = `Perimeter: <strong>${p} m</strong> · Area: <strong>${a} m²</strong>. `;
+    if (p >= 12 && a > 0) {
+      const optimalA = Math.round((p/4) * (p/4));
+      if (a < optimalA - 1) {
+        msg += `A square with perimeter ${p} m would have sides of ${(p/4).toFixed(1)} m and enclose about <strong>${optimalA} m²</strong>. Your shape encloses ${optimalA - a} m² less — try making it squarer!`;
+      } else {
+        msg += `Great shape! You're close to the maximum possible area (${optimalA} m²) for a ${p} m perimeter.`;
+      }
+    } else {
+      msg += `Try drawing a bigger shape to see how perimeter and area grow together.`;
+    }
+    text.innerHTML = msg;
+    box.classList.add('show');
+  } else if (p > 0 && a === 0) {
+    text.innerHTML = `<strong>${p} m</strong> of fence placed, but no area enclosed yet. Make sure your fence forms a completely closed loop — every corner must connect!`;
+    box.classList.add('show');
+  } else {
+    hideInsight();
+  }
+}
+
+function setChallenge(t) {
   resetFarm();
+  challengeMode = t;
+  document.querySelectorAll('.ch-btn').forEach(b => b.classList.remove('on'));
+  const msgs = {
+    max:  'Use exactly 20 m of fence (20 edges). Build the shape that encloses the MOST grass. Hint: squares beat rectangles!',
+    min:  'Use exactly 20 m of fence (20 edges). Build the shape that encloses the LEAST grass. Hint: try a very long thin strip!',
+    same: 'Draw any closed shape. Note its perimeter. Then clear and draw a different shape with the same perimeter. Compare the areas — they will be different!',
+  };
+  document.getElementById('ch-q').textContent = msgs[t];
+  document.getElementById('chl-' + t.replace('max','max').replace('min','min').replace('same','same')).classList.add('on');
 }
 
-// -- PRACTICE --
-const Qs=[
-  {q:'A rectangle is 5m long and 3m wide. What is its perimeter?',ans:'16 m',opts:['8 m','15 m','16 m','20 m'],exp:'2?(5+3) = 16 m'},
-  {q:'A square has a side of 7m. What is its area?',ans:'49 m?',opts:['28 m?','49 m?','28 m','14 m?'],exp:'7?7 = 49 m?'},
-  {q:'A rectangle is 8m long and 4m wide. What is its area?',ans:'32 m?',opts:['24 m?','32 m?','48 m?','24 m'],exp:'8?4 = 32 m?'},
-  {q:'Perimeter of a square = 36m. What is the side length?',ans:'9 m',opts:['4 m','6 m','9 m','12 m'],exp:'36 ? 4 = 9 m'},
-  {q:'Two rectangles both have perimeter 20m. Can they have different areas?',ans:'Yes',opts:['Yes','No','Only if square','Impossible to tell'],exp:'Example: 6?4=24m? vs 8?2=16m?. Same perimeter, different area!'},
-  {q:'A rectangle has area 24m? and one side 6m. Other side?',ans:'4 m',opts:['3 m','4 m','6 m','18 m'],exp:'24 ? 6 = 4 m'},
-  {q:'Which has the larger area: a 5m?5m square or a 7m?3m rectangle?',ans:'5m?5m square',opts:['5m?5m square','7m?3m rectangle','They are equal','Impossible to say'],exp:'25 m? vs 21 m? - the square wins!'},
+// Override challengeMode on free draw
+const origReset = resetFarm;
+function resetFarm() {
+  initEdges(); hoverEdge = null; challengeMode = null;
+  document.querySelectorAll('.ch-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById('ch-q').textContent = 'Pick a challenge below, or draw freely to explore how perimeter and area relate.';
+  hideInsight(); draw();
+}
+
+// ── Practice questions ────────────────────────────────────────────────────────
+const Qs = [
+  { q: 'A rectangle is 5 m long and 3 m wide. What is its perimeter?',
+    ans: '16 m', opts: ['8 m','15 m','16 m','20 m'], exp: '2 × (5 + 3) = 16 m — perimeter goes all the way around.' },
+  { q: 'A square has a side length of 7 m. What is its area?',
+    ans: '49 m²', opts: ['28 m²','49 m²','14 m','28 m'], exp: '7 × 7 = 49 m² — area fills every square metre inside.' },
+  { q: 'A rectangle is 8 m long and 4 m wide. What is its area?',
+    ans: '32 m²', opts: ['24 m²','32 m²','48 m²','24 m'], exp: '8 × 4 = 32 m².' },
+  { q: 'The perimeter of a square is 36 m. What is the side length?',
+    ans: '9 m', opts: ['4 m','6 m','9 m','12 m'], exp: '36 ÷ 4 = 9 m — a square has 4 equal sides.' },
+  { q: 'Two rectangles both have perimeter 20 m. Can they have different areas?',
+    ans: 'Yes', opts: ['Yes','No','Only if square','Impossible to tell'],
+    exp: 'Yes! A 6×4 rectangle: area = 24 m². A 9×1 rectangle: area = 9 m². Same perimeter, very different areas.' },
+  { q: 'A rectangle has area 24 m² and one side 6 m. What is the other side?',
+    ans: '4 m', opts: ['3 m','4 m','6 m','18 m'], exp: '24 ÷ 6 = 4 m — divide area by the known side.' },
+  { q: 'Which has the larger area: a 5 m × 5 m square or a 7 m × 3 m rectangle?',
+    ans: '5 m × 5 m square', opts: ['5 m × 5 m square','7 m × 3 m rectangle','Equal','Cannot tell'],
+    exp: '25 m² vs 21 m² — both have perimeter 20 m, but the square has more area!' },
+  { q: 'What does "area" measure?',
+    ans: 'The space inside a shape', opts: ['The length around a shape','The space inside a shape','The number of sides','The height of a shape'],
+    exp: 'Area = the space inside. Perimeter = the distance around.' },
+  { q: 'A fence encloses a 6 m × 4 m field. How many metres of fence is that?',
+    ans: '20 m', opts: ['10 m','20 m','24 m','48 m'], exp: '2 × (6 + 4) = 20 m of fence (perimeter).' },
 ];
-let qi=0,usedQ=[];
-function nextPQ(){
-  if(usedQ.length>=Qs.length)usedQ=[];
-  let idx;do{idx=Math.floor(Math.random()*Qs.length)}while(usedQ.includes(idx));
-  usedQ.push(idx);qi=idx;
-  const q=Qs[idx];
-  document.getElementById('pq-text').textContent=q.q;
-  document.getElementById('pq-fb').textContent='';
-  document.getElementById('pq-fb').className='pq-fb';
-  const opts=document.getElementById('pq-opts');
-  opts.innerHTML='';
-  [...q.opts].sort(()=>Math.random()-.5).forEach(o=>{
-    const b=document.createElement('button');
-    b.className='ans-opt';b.textContent=o;
-    b.onclick=()=>{
-      opts.querySelectorAll('.ans-opt').forEach(x=>x.onclick=null);
-      const ok=o===q.ans;
-      b.classList.add(ok?'correct':'wrong');
-      if(!ok)opts.querySelectorAll('.ans-opt').forEach(x=>{if(x.textContent===q.ans)x.classList.add('correct')});
-      const fb=document.getElementById('pq-fb');
-      fb.textContent=(ok?'? Correct! ':'? ')+q.exp;
-      fb.className='pq-fb '+(ok?'ok':'no');
+let pqUsed = [];
+function nextPQ() {
+  if (pqUsed.length >= Qs.length) pqUsed = [];
+  let idx; do { idx = Math.floor(Math.random() * Qs.length); } while (pqUsed.includes(idx));
+  pqUsed.push(idx);
+  const q = Qs[idx];
+  document.getElementById('pq-text').textContent = q.q;
+  document.getElementById('pq-fb').textContent = '';
+  document.getElementById('pq-fb').className = 'pq-fb';
+  const opts = document.getElementById('pq-opts'); opts.innerHTML = '';
+  [...q.opts].sort(() => Math.random() - .5).forEach(o => {
+    const b = document.createElement('button'); b.className = 'ans-opt'; b.textContent = o;
+    b.onclick = () => {
+      opts.querySelectorAll('.ans-opt').forEach(x => x.onclick = null);
+      const ok = o === q.ans;
+      b.classList.add(ok ? 'correct' : 'wrong');
+      if (!ok) opts.querySelectorAll('.ans-opt').forEach(x => { if (x.textContent === q.ans) x.classList.add('correct'); });
+      const fb = document.getElementById('pq-fb');
+      fb.textContent = (ok ? '✓ Correct! ' : '✗ Not quite. ') + q.exp;
+      fb.className = 'pq-fb ' + (ok ? 'ok' : 'no');
     };
     opts.appendChild(b);
   });
 }
 
-function switchTab(t){
-  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.textContent.toLowerCase().includes(t==='farm'?'farm':'prac')));
-  document.getElementById('pnl-farm').classList.toggle('on',t==='farm');
-  document.getElementById('pnl-practice').classList.toggle('on',t==='practice');
-  if(t==='practice')nextPQ();
+// ── Tab switch ─────────────────────────────────────────────────────────────────
+function switchTab(t) {
+  document.querySelectorAll('.tab').forEach((b, i) =>
+    b.classList.toggle('on', ['farm','practice'][i] === t));
+  document.getElementById('pnl-farm').classList.toggle('on',     t === 'farm');
+  document.getElementById('pnl-practice').classList.toggle('on', t === 'practice');
+  if (t === 'practice') nextPQ();
 }
 
+// ── Init ───────────────────────────────────────────────────────────────────────
 draw();
+nextPQ();
 </script>
 </body>
 </html>
